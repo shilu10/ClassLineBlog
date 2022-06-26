@@ -1,0 +1,31 @@
+
+.single-post-img{
+    border-radius: 0%;
+    height: 500px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.single-post-edit{
+   float:right;
+   
+}
+
+.edit{
+    margin-right: 10px;
+    padding: 5px;
+    font-size: 25px;
+    color: rgb(17, 16, 13);
+    cursor: pointer;
+}
+
+.trash{
+    padding-right: 25px;
+    font-size: 25px;
+    color: rgb(238, 71, 71);
+    cursor: pointer;
+}
+
+.paragraph{
+    margin-top: 35px;
+}
