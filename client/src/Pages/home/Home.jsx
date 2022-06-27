@@ -14,21 +14,29 @@ import jwt_decode from 'jwt-decode';
 
 const Home = () => {
 
-  const access_token = localStorage.getItem("accessToken");
+  const access_token = sessionStorage.getItem("accessToken");
   const currentLogin = useSelector(state=>state.loginReducer.currentLogin);
   const [posts, setPosts] = useState([]);
   const dispatch = useDispatch();
   const query = '*[_type == "post"]{title, slug, body, mainImage{asset ->{url}, alt}, "authorName": author->name, "authorImage": author->image, "categories": categories[]->title, "createdAt": _createdAt, "authorImage": author->image}';
-  var decoded = jwt_decode(access_token);
   
-  if(decoded._doc){
-    decoded = decoded._doc;
-  }
-  const username = decoded.username;
-  const profilePicture = decoded.profilePicture;
-  const email = decoded.email;
-  const expDate = decoded.exp;
-  console.log(username, "username from home")
+  var username = null;
+  var profilePicture = null;
+  var email = null;
+  var expDate = null;
+
+
+  if(access_token){
+    var decoded = jwt_decode(access_token);
+    if(decoded._doc){
+      decoded = decoded._doc;
+    }
+    username = decoded.username;
+    profilePicture = decoded.profilePicture;
+    email = decoded.email;
+    expDate = decoded.exp;
+}
+console.log(Date.now(), expDate*1000, Date.now()>expDate*1000, "username from home", username, email, decoded)
 
   useEffect(()=>{
     client.fetch(query)
@@ -40,7 +48,8 @@ const Home = () => {
         console.log(err)
       });
     
-    if(!access_token || Date.now()>expDate*1000){
+    if(Date.now()>expDate*1000 && access_token){
+
       const fetchAccessToken = async() => {
           try{
             // Because access token is saved inmemory when user closes the tab it will be deleted.
@@ -51,7 +60,7 @@ const Home = () => {
             withCredentials: true 
             });
             
-            localStorage.setItem("accessToken", response.data.access_token)
+            sessionStorage.setItem("accessToken", response.data.access_token)
             dispatch(loginActions.setAccessToken(response.data.access_token));
           }
           catch(err){
@@ -81,7 +90,6 @@ const Home = () => {
       profilePicture: profilePicture,
       isUser: true
     };
-    console.log(user, "from home")
     userActions.setUser(user);
   }, [])
 

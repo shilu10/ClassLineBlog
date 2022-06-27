@@ -15,31 +15,32 @@ export default function Comments({ blogId }){
   const [blogComments, setBlogComments]  = useState([]);
   const [activeComment, setActiveComment] = useState(null);
   const dispatch = useDispatch();
-  var access_token = localStorage.getItem("accessToken");
-  console.log(access_token, "from comments")
   const axiosInt = axios.create();
-  var decoded = jwt_decode(access_token);
-  console.log(decoded, "from comments")
-  if(decoded._doc){
-    decoded = decoded._doc;
-  }
-  else{
-    decoded = jwt_decode(access_token);
-  }
-  console.log(decoded, "decoded second")
-  var currentUsername = decoded.username;
-  var expDate = decoded.exp;
-  var profilePicture = decoded.profilePicture;
-  var email = decoded.email;
-  console.log(currentUsername, "from comments")
+  
+  var access_token = sessionStorage.getItem("accessToken");
+  var currentUsername = null;
+  var profilePicture = null;
+  var email = null;
+  var expDate = null;
+  console.log(access_token, "username from home")
 
+  if(access_token){
+    var decoded = jwt_decode(access_token);
+    if(decoded._doc){
+      decoded = decoded._doc;
+    }
+    currentUsername = decoded.username;
+    profilePicture = decoded.profilePicture;
+    email = decoded.email;
+    expDate = decoded.exp;
+}
   const user = {
     username: currentUsername,
     email: email,
     profilePicture: profilePicture,
     isUser: true
   };
-  console.log(user, "suer from comments")
+  console.log(user, "suer from comments", decoded)
   
   userActions.setUser(user);
 
@@ -61,7 +62,7 @@ export default function Comments({ blogId }){
     useEffect(()=>{
       const currDate = Date.now();
       console.log("access", currDate>expDate*1000, currDate, expDate)
-      if(!access_token || (currDate>expDate*1000)){
+      if(access_token && (currDate>expDate*1000)){
         const fetchAccessToken = async() => {
             try{
               // Because access token is saved inmemory when user closes the tab it will be deleted.
@@ -71,7 +72,7 @@ export default function Comments({ blogId }){
               const response = await axios.get('http://localhost:8000/api/auth/refresh_token', {
               withCredentials: true 
               });
-              localStorage.setItem("accessToken", response.data.access_token);
+              sessionStorage.setItem("accessToken", response.data.access_token);
             }
             catch(err){
           console.log(err, "while getting");
@@ -106,7 +107,7 @@ export default function Comments({ blogId }){
                   withCredentials: true 
                   });
                   expDate = jwt_decode(response).exp;
-                  localStorage.setItem("accessToken", response.data.access_token)
+                  sessionStorage.setItem("accessToken", response.data.access_token)
               }
         
         return config;
@@ -184,7 +185,7 @@ export default function Comments({ blogId }){
   const deleteComment = (commentId) => {
       if (window.confirm("Are you sure you want to remove comment?")) {
         try{
-          const response = axios.delete(`http://localhost:8000/api/comments//${commentId}`);
+          const response = axios.delete(`http://localhost:8000/api/comments//${commentId}`, {withCredentials: true});
           toast.success('Comment deleted successfully, Refresh the page to view the comment',
             {
               icon: '👏',

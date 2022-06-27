@@ -2,6 +2,7 @@ const router = require("express").Router();
 const CommentModel = require("../../models/Comment");
 
 router.get('/', async (req, res) => {
+    console.log(req.cookies, "cookies")
     try{
         const comments = await CommentModel.find();
         return res.json(comments);
@@ -13,14 +14,19 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/:blogid', async (req, res) => {
-    var id = await CommentModel.find().length + 1; 
+    console.log(req.cookies, "in commensts")
+    var id = await CommentModel.find(); 
+    
     if(!id){
         id = 0;
     }
+    else{id = id.length + 1;}
+    console.log(id)
+    
     const blogId = req.params.blogid;
     const comment = await CommentModel(
         {
-            blogId: blogId,
+            blogName: blogId,
             username: req.body.username,
             parentId: req.body.parentId,
             body: req.body.body,

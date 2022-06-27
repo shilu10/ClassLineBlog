@@ -47,18 +47,9 @@
     font-size: 22px;
 }
 
-.setting-password-wrapper{
-    display: flex;
-    flex-wrap: wrap;
-    max-width: 50%;
-    width: 50%;
-    
-}
-
 .setting-password{
     margin: 15px;
-    max-width: 40%;
-    width: 40%;
+    width: 50%;
     border-radius: 20px;
     color: #858585;
     outline: none;
@@ -68,21 +59,6 @@
     border-bottom-style: hidden;
     font-size: 22px;
     height: 40px;
-}
-
-.setting-confirm{
-    margin: 15px;
-    max-width: 40%;
-    width: 40%;
-    border-radius: 20px;
-    color: #858585;
-    outline: none;
-    border-top-style: hidden;
-    border-right-style: hidden;
-    border-left-style: hidden;
-    border-bottom-style: hidden;
-    font-size: 22px;
-    height: 40px
 }
 
 .setting-button{
@@ -92,7 +68,7 @@
     max-width: 50%;
     border-radius: 10px;
     height: 40px;
-    background-color: rgb(247, 76, 76);
+   background-color: rgb(243, 49, 49);
     outline: none;
     border-top-style: hidden;
     border-right-style: hidden;
@@ -101,4 +77,8 @@
     font-size: 18px;
     color: whitesmoke;
     cursor: pointer;
+}
+
+.setting-button:hover{
+    background-color: rgb(245, 97, 97);
 }

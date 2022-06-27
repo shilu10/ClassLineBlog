@@ -31,12 +31,12 @@ export default function Topbar({ isUser, profilePicture }) {
               </Link>
             </li>
             <li className="toplist-item">
-              <Link className="link" to="/login" onClick={e=>{
-                console.log("setting page")
-                colorActions.setColor("#dad6fc")}}>
-                {isUser ? "Logout" : "Login"}
-
-              </Link> |{" "}
+              {isUser ? <Link className="link" to={"/logout"}>Logout</Link> : 
+                <Link className="link" to="/login">
+                  Login
+                </Link> 
+              }
+              
             </li>
           </ul>
         </div>

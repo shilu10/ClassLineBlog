@@ -1,33 +1,85 @@
 const router = require('express').Router();
 const User = require('../../models/User');
 const bcrypt = require('bcrypt');
-const Post = require('../../models/BlogPost');
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+const RefreshTokenModel = require('../../models/RefreshToken');
+
 
 //update 
+dotenv.config();
 router.put('/:id', async (req, res) => {
-    if(req.body.userId === req.params.id){
-        console.log(req.body.password)
-
-        if(req.body.password){
-            const salt = await bcrypt.genSalt(10);
-            req.body.password = await bcrypt.hash(req.body.password, salt);
-
+    console.log(req.body, "body")
+   // console.log(req.cookies, req.cookie)
+    const userRefreshToken = req.cookies.refresh_token;
+    const realRefreshToken = process.env.SECRET_REFRESH_TOKEN;
+    const accessToken = process.env.SECRET_ACCESS_TOKEN
+    var verified = false
+    const valid = jwt.verify(userRefreshToken, realRefreshToken, (err, verifiedJWT)=>{
+        if(err){
+            verified = false;
         }
-        try{
-            const user = await User.findOneAndUpdate(req.params.id, {
-                $set: req.body
-            })
-            return res.status(201).json("updated the user successfully")
-
+        else{
+            verified = true;
         }
-        catch(err){
-            return res.status(400).json("error while updating the user")
-        }
+    });
+    
+    if(!verified){
+        return res.status(400).json("no credentials");
     }
     else{
-        return res.status(401).json("Wrong Credentials")
-    }
-})
+            if(req.body.password){
+                const salt = await bcrypt.genSalt(10);
+                req.body.password = await bcrypt.hash(req.body.password, salt);
+
+            }
+            try{
+
+                const realUser = await User.findById(req.params.id);
+                const oldUsername = realUser.toJSON().username;
+                console.log(oldUsername, "realUser")
+
+                const user = await User.findByIdAndUpdate(req.params.id, {
+                    $set: req.body
+                });
+                var newUser = await User.findById(req.params.id);
+                console.log(newUser, "new user")
+                var { password, ...others } = newUser;
+                var { password, ...others} = others._doc;
+                const newAccessToken = jwt.sign(others, accessToken, { expiresIn: '20s'});
+                const refreshToken = jwt.sign(others, realRefreshToken);
+                
+                const newUsername = newUser.toJSON().username;
+                // new refreshtoken update for an user
+                const oldRefreshToken = await RefreshTokenModel.findOneAndDelete(
+                    {"username": oldUsername},
+                );
+                
+                const tokenBody = {
+                    username: newUsername,
+                    refreshtoken: refreshToken
+                }
+                const newRefreshtokenObj = await RefreshTokenModel(tokenBody);
+                console.log(jwt.decode(newAccessToken, "newAcc"))
+                try{
+                    newRefreshtokenObj.save();
+                }
+                catch(err){
+                    console.log(err);
+                };
+                return res.cookie("refresh_token", refreshToken, {sameSite: 'none', secure: true, httpOnly:true})
+                .status(200)
+                .json({
+                    "access_token": newAccessToken,
+                })
+
+            }
+            catch(err){
+                console.log(err)
+                return res.status(400).json("error while updating the user");
+            }  
+}
+});
 
 //delete
 

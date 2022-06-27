@@ -75,7 +75,7 @@ export default function Login() {
           );
           const data = response.data;
           console.log(data, "data")
-          localStorage.setItem("accessToken", data.access_token)
+          sessionStorage.setItem("accessToken", data.access_token)
           dispatch(loginActions.setCurrentLogin()); 
           navigateLogin("/")
         }

@@ -25,7 +25,7 @@ router.post("/register", async(req, res) => {
     }); 
         
         const createdUser = await newUser.save();
-        console.log(createdUser, "creat")
+       
         return res.status(200).json(createdUser);
     }
     catch(err){ 
@@ -52,8 +52,9 @@ router.post('/login', async(req, res) => {
         }
         // need to send access and refresh token
         const { password, ...others } = user._doc;
-        console.log(others, "others in -----------refresh------")
+        
         const accessToken = jwt.sign(others, SecretAccessToken, { expiresIn: '20s'});
+        
         const refreshToken = jwt.sign(others, SecretRefreshToken); 
 
         try{
@@ -68,7 +69,7 @@ router.post('/login', async(req, res) => {
             return res.send("internal server error")
         }
         
-        return res.cookie("refresh_token", refreshToken, {sameSite: 'none', secure: true, httpOnly: true})
+        return res.cookie("refresh_token", refreshToken, {sameSite: 'none', secure: true, httpOnly:true})
                   .status(200)
                   .json({
                       "access_token": accessToken,
@@ -81,30 +82,39 @@ router.post('/login', async(req, res) => {
 });
 
 router.get('/refresh_token', async(req, res) => {
-    console.log("reqin")
+   
     const userRefreshToken = req.cookies.refresh_token;
-    console.log(userRefreshToken, "userRefreshtoken")
+    
+    var isVerified = false;
     if(userRefreshToken){
-        const valid = jwt.verify(userRefreshToken, SecretRefreshToken);
+        const valid = jwt.verify(userRefreshToken, SecretRefreshToken, (err, verified) => {
+            if(err){
+                return res.status(400).send(err)
+            }
+            else{
+                isVerified = true;
+            }
+        });
         
         try{
-            if(valid){
+            if(isVerified){
                 const refreshTokenDetails = await RefreshToken.find({
                     refreshtoken: userRefreshToken
                 })
 
-                console.log(refreshTokenDetails, "refreshtokendetauls")
+                
                 const username = refreshTokenDetails[0].username;
-                console.log(username, "uernmae")
-
+                
                 const userDetails = await User.findOne(
                     {
                         username: username,
                     });
                 
+                console.log(userDetails, "from refresh token")
                 const {password, ...others} = userDetails;
-                console.log(others, "----------in loginuserdetails")
-                const newAccessToken = jwt.sign(others, SecretAccessToken, { expiresIn: '20s'})
+                
+                const newAccessToken = jwt.sign(userDetails.toJSON(), SecretAccessToken, { expiresIn: '20s'})
+                console.log(jwt.decode(newAccessToken), "from refresh")
                 return res.json(
                     {
                         "access_token": newAccessToken

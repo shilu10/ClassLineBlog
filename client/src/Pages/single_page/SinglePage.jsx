@@ -11,18 +11,22 @@ import jwt_decode from "jwt-decode";
 import { current } from '@reduxjs/toolkit';
 
 export default function SinglePage() {
-  var access_token = localStorage.getItem("accessToken");
-  var decoded = jwt_decode(access_token);
-  console.log(decoded, "from comments")
-  if(decoded._doc){
-    decoded = decoded._doc;
-  }
-  else{
-    decoded = jwt_decode(access_token);
-  }
+  var access_token = sessionStorage.getItem("accessToken");
+  var currentUsername = null;
+  var profilePicture = null;
 
-  var currentUsername = decoded.username;
-  var profilePicture = decoded.profilePicture;
+  if(access_token){
+    var decoded = jwt_decode(access_token);
+    console.log(decoded, "from comments")
+    if(decoded._doc){
+      decoded = decoded._doc;
+    }
+    else{
+      decoded = jwt_decode(access_token);
+    }
+    var currentUsername = decoded.username;
+    var profilePicture = decoded.profilePicture;
+  }
 
   const id = useParams().id;
   const [blog, setBlog] = useState({});
