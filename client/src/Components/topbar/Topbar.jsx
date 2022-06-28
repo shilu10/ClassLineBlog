@@ -5,6 +5,7 @@ import jwt_decode from "jwt-decode";
 import { useEffect } from "react";
 
 export default function Topbar({ isUser, profilePicture }) {
+  console.log(profilePicture, "topbar")
   return (
     <div className="topbar">
         <div className="top-left">

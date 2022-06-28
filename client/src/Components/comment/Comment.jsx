@@ -68,11 +68,11 @@ const Comment = ({
             {canEdit && (
               <div
                 className="comment-action"
-                onClick={() =>
+                onClick={() =>{
                   
-                  setActiveComment({ id: comment.id, type: "editing" })
-
-                }     
+                  setActiveComment({ id: comment.id, type: "editing" });
+                  
+                }     }
               >
                 Edit
               </div>
@@ -80,7 +80,10 @@ const Comment = ({
             {canDelete && (
               <div
                 className="comment-action"
-                onClick={() => deleteComment(comment.id)}
+                onClick={() => {deleteComment(comment.id)
+                  
+                }
+            }
               >
                 Delete
               </div>

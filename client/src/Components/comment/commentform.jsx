@@ -10,7 +10,7 @@ const CommentForm = ({
   handleCancel,
   initialText = "",
 }) => {
-  var access_token = localStorage.getItem("accessToken");
+  var access_token = sessionStorage.getItem("accessToken");
  
   const [text, setText] = useState(initialText);
   const isTextareaDisabled = text.length === 0;

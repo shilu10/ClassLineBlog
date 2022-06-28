@@ -25,7 +25,6 @@ const Home = () => {
   var email = null;
   var expDate = null;
 
-
   if(access_token){
     var decoded = jwt_decode(access_token);
     if(decoded._doc){
@@ -36,7 +35,7 @@ const Home = () => {
     email = decoded.email;
     expDate = decoded.exp;
 }
-console.log(Date.now(), expDate*1000, Date.now()>expDate*1000, "username from home", username, email, decoded)
+//console.log(Date.now(), expDate*1000, Date.now()>expDate*1000, "username from home", username, email, decoded)
 
   useEffect(()=>{
     client.fetch(query)

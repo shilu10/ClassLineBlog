@@ -110,11 +110,11 @@ router.get('/refresh_token', async(req, res) => {
                         username: username,
                     });
                 
-                console.log(userDetails, "from refresh token")
-                const {password, ...others} = userDetails;
+                //console.log(userDetails, "from refresh token")
+               // const {password, ...others} = userDetails;
                 
                 const newAccessToken = jwt.sign(userDetails.toJSON(), SecretAccessToken, { expiresIn: '20s'})
-                console.log(jwt.decode(newAccessToken), "from refresh")
+               // console.log(jwt.decode(newAccessToken), "from refresh")
                 return res.json(
                     {
                         "access_token": newAccessToken

@@ -130,6 +130,7 @@ export default function Comments({ blogId }){
         {
           withCredentials: true,
         });
+        window.location.reload();
         toast.success('Comment Posted successfully, Refresh the page to view the comment',
                   {
                     icon: '👏',
@@ -143,7 +144,10 @@ export default function Comments({ blogId }){
                       pauseOnHover: true,
                       draggable: true,
                       progress: undefined,
-                    }}); }
+                    }}); 
+                   
+                  }
+                    
       catch(err){
         console.log(err)
       }
@@ -161,6 +165,7 @@ export default function Comments({ blogId }){
         withCredentials: true,
       },
       );
+      window.location.reload();
       toast.success('Comment Updated successfully, Refresh the page to view the comment',
       {
         icon: '👏',
@@ -200,6 +205,8 @@ export default function Comments({ blogId }){
                 draggable: true,
                 progress: undefined,
             }});
+          window.location.reload();
+
         }
         catch(err){
           window.alert("Error deleting comment");
