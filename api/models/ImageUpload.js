@@ -1,19 +1,18 @@
 const mongoose = require('mongoose');
 
-const ImageUploadSchema = mongoose.Schema({
-    name: {
+const ImageUploadSchema = mongoose.Schema([{
+    id: {
         type: String,
-        required: true,
-        unique: true,
+        required: true
     },
     image: {
         data: Buffer,
         contentType: String,
         required: false
     }
-});
+}]);
 
-module.export =mongoose.model(
+module.exports =mongoose.model(
         "ImageUploadModel",
         ImageUploadSchema
     );

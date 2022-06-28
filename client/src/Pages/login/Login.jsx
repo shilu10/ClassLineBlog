@@ -7,6 +7,7 @@ import { gapi } from "gapi-script";
 import LoginButton from '../../Components/loginbutton/LoginButton';
 import { useSelector, useDispatch } from 'react-redux';
 import { registerActions, loginActions } from '../../Components/store/store';
+import jwt_decode from 'jwt-decode';
 
 
 export default function Login() {
@@ -73,6 +74,15 @@ export default function Login() {
               },
               { withCredentials: true }
           );
+          
+          var userId = jwt_decode(response.data.access_token);
+          console.log(userId, "userId")
+          userId = userId._id;
+          console.log(userId)
+          const profilePictureResponse = await axios.post(
+            `http://localhost:8000/upload/images/uploadProfile/${userId}`
+          );
+          console.log(profilePictureResponse, "proflilepicture")
           const data = response.data;
           console.log(data, "data")
           sessionStorage.setItem("accessToken", data.access_token)

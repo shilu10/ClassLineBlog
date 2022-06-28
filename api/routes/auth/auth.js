@@ -11,7 +11,7 @@ const SecretAccessToken = process.env.SECRET_ACCESS_TOKEN;
 
 // register 
 router.post("/register", async(req, res) => {
-    console.log(req.body)
+   
     try{
         const saltRound = 10;
         const salt = await bcrypt.genSalt(saltRound);
@@ -36,7 +36,7 @@ router.post("/register", async(req, res) => {
 
 // we can give mail or username to retrieve the user.
 router.post('/login', async(req, res) => {
-    console.log("req in ")
+   
     try{
         const identity = req.body.identity;
         const plainTextPassword = req.body.password;
@@ -109,9 +109,7 @@ router.get('/refresh_token', async(req, res) => {
                     {
                         username: username,
                     });
-                
-                //console.log(userDetails, "from refresh token")
-               // const {password, ...others} = userDetails;
+                    
                 
                 const newAccessToken = jwt.sign(userDetails.toJSON(), SecretAccessToken, { expiresIn: '20s'})
                // console.log(jwt.decode(newAccessToken), "from refresh")

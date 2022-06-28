@@ -9,19 +9,20 @@ import { useState, useEffect } from 'react';
 import toast,{ Toaster } from 'react-hot-toast';
 import client from '../../Assets/sanityClient';
 import { useSelector, useDispatch } from 'react-redux';
-import { loginActions, userActions } from '../../Components/store/store';
+import { loginActions, userActions, pictureActions } from '../../Components/store/store';
 import jwt_decode from 'jwt-decode';
 
 const Home = () => {
 
+  const profilePicture = useSelector(state=>state.pictureReducer.profilePicture);
   const access_token = sessionStorage.getItem("accessToken");
   const currentLogin = useSelector(state=>state.loginReducer.currentLogin);
   const [posts, setPosts] = useState([]);
   const dispatch = useDispatch();
   const query = '*[_type == "post"]{title, slug, body, mainImage{asset ->{url}, alt}, "authorName": author->name, "authorImage": author->image, "categories": categories[]->title, "createdAt": _createdAt, "authorImage": author->image}';
   
+  var userId = null;
   var username = null;
-  var profilePicture = null;
   var email = null;
   var expDate = null;
 
@@ -31,12 +32,34 @@ const Home = () => {
       decoded = decoded._doc;
     }
     username = decoded.username;
-    profilePicture = decoded.profilePicture;
+  //  profilePicture = decoded.profilePicture;
+    userId = decoded._id;
     email = decoded.email;
     expDate = decoded.exp;
 }
-//console.log(Date.now(), expDate*1000, Date.now()>expDate*1000, "username from home", username, email, decoded)
 
+const fetchProfile = async() => {
+  try{
+    const response = await axios.get(`http://localhost:8000/upload/images/${userId}`);
+    // this function used for converting an array buffer into base64.. ( very important function)
+    function toBase64(arr) {
+      arr = new Uint8Array(arr) 
+      return btoa(
+         arr.reduce((data, byte) => data + String.fromCharCode(byte), '')
+      );
+   } ;
+    const url = `data:image/png;base64,${toBase64(response.data.image.data.data)}`;
+  
+    dispatch(pictureActions.setProfielPicture(url));
+  }
+  catch(err){
+    console.log(err);
+  }
+};
+
+  if(username){
+    fetchProfile();
+  }
   useEffect(()=>{
     client.fetch(query)
       .then(data => {
@@ -80,7 +103,7 @@ const Home = () => {
         dispatch(loginActions.setCurrentLogin());
       }
      
-  }, [])
+  }, []);
 
   useEffect(()=>{
     const user = {
@@ -94,7 +117,7 @@ const Home = () => {
 
   return (
         <div className='body-container'>
-            <Topbar profilePicture={profilePicture} isUser={username?true:false}/>
+            <Topbar isUser={username?true:false} profilePicture={profilePicture}/>
             <Toaster />
             <Header title="Simple Blogging Website" />
             <div className="home">
@@ -110,6 +133,6 @@ const Home = () => {
               : <p>No blogpost</p>}
             </div>
         </div>
-  )}
+  )};
 
 export default Home;

@@ -2,10 +2,11 @@ import "./topbar.css"
 import {Link} from 'react-router-dom';
 import { colorActions } from "../store/store";
 import jwt_decode from "jwt-decode";
-import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 export default function Topbar({ isUser, profilePicture }) {
-  console.log(profilePicture, "topbar")
+ // const profilePicture = useSelector(state=>state.pictureReducer.profilePicture);
+ // console.log(profilePicture, "topbar");
   return (
     <div className="topbar">
         <div className="top-left">

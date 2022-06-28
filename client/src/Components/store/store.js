@@ -61,6 +61,19 @@ const userSlice = createSlice({
     }
 });
 
+const profilePictureSlice = createSlice({
+    name: 'profielpicture',
+    initialState: {
+        profilePicture: ''
+    },
+    reducers: {
+        setProfielPicture(state, action){
+            state.profilePicture = action.payload;
+        }
+    }
+});
+
+export const pictureActions = profilePictureSlice.actions;
 export const registerActions = registerSlice.actions;
 export const loginActions = loginSlice.actions;
 export const colorActions = colorSlice.actions;
@@ -72,6 +85,7 @@ const reducer = {
     loginReducer: loginSlice.reducer,
     colorReducer: colorSlice.reducer,
     userReducer: userSlice.reducer,
+    pictureReducer: profilePictureSlice.reducer
 }
 
 const store = configureStore({

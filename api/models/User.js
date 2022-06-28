@@ -19,10 +19,8 @@ const UserSchema = new mongoose.Schema({
         required: true
     },
     profilePicture: {
-        data: Buffer,
-        default: "",
-        contentType: String,
-        required: false
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ImageUploadModel"
         }
     },
     // this will create a timestamp for every addition of rows
