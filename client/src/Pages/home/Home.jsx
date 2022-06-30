@@ -14,7 +14,8 @@ import jwt_decode from 'jwt-decode';
 
 const Home = () => {
 
-  const profilePicture = useSelector(state=>state.pictureReducer.profilePicture);
+  const userProfile = JSON.parse(sessionStorage.getItem("userProfile"));
+  var profilePicture = useSelector(state=>state.pictureReducer.profilePicture);
   const access_token = sessionStorage.getItem("accessToken");
   const currentLogin = useSelector(state=>state.loginReducer.currentLogin);
   const [posts, setPosts] = useState([]);
@@ -38,23 +39,34 @@ const Home = () => {
     expDate = decoded.exp;
 }
 
+  if(userProfile){
+    userId = userProfile.googleId;
+    email = userProfile.email;
+    username = userProfile.givenName;
+    profilePicture = userProfile.imageUrl;
+    dispatch(pictureActions.setProfielPicture(profilePicture));
+  }
+
 const fetchProfile = async() => {
-  try{
-    const response = await axios.get(`http://localhost:8000/upload/images/${userId}`);
-    // this function used for converting an array buffer into base64.. ( very important function)
-    function toBase64(arr) {
-      arr = new Uint8Array(arr) 
-      return btoa(
-         arr.reduce((data, byte) => data + String.fromCharCode(byte), '')
-      );
-   } ;
-    const url = `data:image/png;base64,${toBase64(response.data.image.data.data)}`;
-  
-    dispatch(pictureActions.setProfielPicture(url));
-  }
-  catch(err){
-    console.log(err);
-  }
+  if(access_token){
+    try{
+        const response = await axios.get(`http://localhost:8000/upload/images/${userId}`);
+        // this function used for converting an array buffer into base64.. ( very important function)
+        function toBase64(arr) {
+          arr = new Uint8Array(arr) 
+          return btoa(
+            arr.reduce((data, byte) => data + String.fromCharCode(byte), '')
+          );
+      } ;
+        const url = `data:image/png;base64,${toBase64(response.data.image.data.data)}`;
+      
+        sessionStorage.setItem("profilePicture", url);
+        dispatch(pictureActions.setProfielPicture(url));
+      }
+    catch(err){
+      console.log(err);
+    }
+}
 };
 
   if(username){

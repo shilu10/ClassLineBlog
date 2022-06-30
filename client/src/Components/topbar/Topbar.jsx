@@ -34,7 +34,7 @@ export default function Topbar({ isUser, profilePicture }) {
             </li>
             <li className="toplist-item">
               {isUser ? <Link className="link" to={"/logout"}>Logout</Link> : 
-                <Link className="link" to="/login">
+                <Link className="link" to={"/login"}>
                   Login
                 </Link> 
               }

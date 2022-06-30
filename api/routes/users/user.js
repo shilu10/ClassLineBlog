@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const RefreshTokenModel = require('../../models/RefreshToken');
 
-
 //update 
 dotenv.config();
 router.put('/:id', async (req, res) => {
