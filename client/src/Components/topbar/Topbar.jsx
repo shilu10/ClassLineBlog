@@ -1,8 +1,6 @@
 import "./topbar.css"
 import {Link} from 'react-router-dom';
 import { colorActions } from "../store/store";
-import jwt_decode from "jwt-decode";
-import { useSelector } from "react-redux";
 
 export default function Topbar({ isUser, profilePicture }) {
  // const profilePicture = useSelector(state=>state.pictureReducer.profilePicture);
@@ -10,45 +8,50 @@ export default function Topbar({ isUser, profilePicture }) {
   return (
     <div className="topbar">
         <div className="top-left">
-        <i style={{fontSize:"32px"}} class="fa fa-cube"></i>          
+          <div className="topbar-logo">
+            <i style={{fontSize:"32px"}} class="fa fa-cube"></i>
+          </div>  
+          <div className="topbar-list-item-wrapper">        
+            <ul className="top-list">
+              <li className="toplist-item" >
+                <div className="li-box">
+                  <Link className="link" to={"/"}>Home</Link> 
+                </div>
+              </li>
+              <li className="toplist-item">
+                <div className="li-box">
+                  <Link className="link" to={"/about"} >
+                  About
+                  </Link>
+                </div>
+              </li>
+              <li className="toplist-item">
+                <div className="li-box-contact">
+                  <Link className="link" to={"/contact"}>
+                    Contact
+                  </Link>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div className="top-center">
-          <ul className="top-list">
-            <li className="toplist-item" >
-              <Link className="link" to={"/"}>Home</Link> 
-            </li>
-            <li className="toplist-item">
-              <Link className="link" to={"/about"} >
-               About
-              </Link>
-            </li>
-            <li className="toplist-item">
-              <Link className="link" to="/contact">
-                Contact
-              </Link>
-            </li>
-            <li className="toplist-item">
-              <Link className="link" to="/write">
-                Write
-              </Link>
-            </li>
-            <li className="toplist-item">
-              {isUser ? <Link className="link" to={"/logout"}>Logout</Link> : 
-                <Link className="link" to={"/login"}>
-                  Login
-                </Link> 
-              }
-              
-            </li>
-          </ul>
-        </div>
-
-        <div className="top-right">
-          <a href="#" className="topbar-hamburger">
+        <a href="#" className="topbar-hamburger">
             <span className="bar"></span>
             <span className="bar"></span>
             <span className="bar"></span>
           </a>
+        <div className="top-right">
+          <ul>
+            <li className="toplist-item">
+              <div className="li-box">
+                {isUser ? <Link className="link" to={"/logout"}>Logout</Link> : 
+                  <Link className="link" to={"/login"}>
+                    Login
+                  </Link> 
+                }
+              </div>
+            </li>
+          </ul>
           <Link className="link" to="settings">
             {profilePicture ? <img className="topbar-img"
               src={profilePicture}
