@@ -88,11 +88,17 @@ const user = {
   }
   else{
   return (
-    <div className='single-page-container'>
-      <div className='single-page'>
-          <Topbar profilePicture={profilePicture} isUser={currentUsername?true:false}/>
-          <SinglePost singleBlog={blog} />
-          <Comments blogName={slug} currentUsername={currentUsername} expDate={expDate} isUser={isUser}/>
+    <div>
+      <Topbar profilePicture={profilePicture} isUser={currentUsername?true:false}/>
+      <br></br>
+      <br></br>
+      <div className='single-page-container'>
+        <div className='single-page'>
+            <SinglePost singleBlog={blog} />
+            <div className='single-page-comment-wrapper'>
+              <Comments blogName={slug} currentUsername={currentUsername} expDate={expDate} isUser={isUser}/>
+            </div>
+        </div>
       </div>
     </div>
   )

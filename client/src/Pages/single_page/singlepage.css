@@ -2,7 +2,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 .single-page{
     width: 70%;
+}
+
+.single-page-comment-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
