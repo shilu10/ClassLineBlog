@@ -1,4 +1,4 @@
-import { GoogleLogin } from 'react-google-login';
+import { useGoogleLogin, GoogleLogin } from 'react-google-login';
 import './loginbutton.css';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -23,7 +23,7 @@ const LoginButton = () => {
     return(
         <div className='login-button'>
             <GoogleLogin 
-                client_id={clientId}
+                
                 onSuccess={onSuccess}
                 buttonText="Continue with Google"
                 onFailure={onFailure}
@@ -31,8 +31,8 @@ const LoginButton = () => {
                 isSignedIn={true}
                 style={{style: "none"}}
                 className="login-button-oauth"
+                scope=""
             />
         </div>
-    )
-}
+    )};
 export default LoginButton;

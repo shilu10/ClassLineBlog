@@ -25,9 +25,9 @@ function App() {
             <Routes>
               <Route path='/' element={ <Home /> } />
               <Route path='/write' element={<WritePage />} />
-                <Route path='/login' element={<Login /> } />
+              <Route path='/login' element={<Login /> } />
               <Route path='/settings' element={<Settings />} />
-              <Route path='/post/:id' element={<SinglePage />} />
+              <Route path='/post/:slug' element={<SinglePage />} />
               <Route path='/about' element={<About />} />
               <Route path='/contact' element={<Contact />} />
               <Route path='/register' element={<Register />} />

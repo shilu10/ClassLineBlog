@@ -11,6 +11,7 @@ import { pictureActions } from '../../Components/store/store';
 
 const Settings = () => {   
     const settingNavigator = useNavigate();
+    const [canRegister, setCanRegister] = useState(false);
     const userProfile = JSON.parse(sessionStorage.getItem("userProfile"));
     const dispatch = useDispatch();
     var access_token = sessionStorage.getItem("accessToken");
@@ -25,6 +26,7 @@ const Settings = () => {
         if(decoded._doc){
         decoded = decoded._doc;
         }
+        setCanRegister(true);
         userId = decoded._id;
         realUsername = decoded.username;
         email = decoded.email;
@@ -146,8 +148,8 @@ const Settings = () => {
                             /> 
                         }
                         <label htmlFor="inputFile" className='profile-upload'>
-                        <i className='settingicons fa fa-upload'></i>
-                    </label>
+                            <i className='settingicons fa fa-upload'></i>
+                        </label>
                     </div>
                     <input type="file" name="file" id="inputFile" style={{display: "none"}} onChange={imageUpdate}/>
 
@@ -164,6 +166,7 @@ const Settings = () => {
                     /> 
                     <button className='setting-button' 
                         onClick={submitUpdate}
+                        disabled={false ? canRegister : true}
                         >
                         Update
                     </button>

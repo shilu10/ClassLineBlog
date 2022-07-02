@@ -10,23 +10,20 @@ router.get('/', async (req, res) => {
     catch(err){
         return err;
     }
-
 })
 
-router.post('/:blogid', async (req, res) => {
-    console.log(req.cookies, "in commensts")
+router.post('/:blogName', async (req, res) => {    
     var id = await CommentModel.find(); 
-    
     if(!id){
         id = 0;
     }
     else{id = id.length + 1;}
     console.log(id)
     
-    const blogId = req.params.blogid;
+    const blogName = req.params.blogName;
     const comment = await CommentModel(
         {
-            blogName: blogId,
+            blogName: blogName,
             username: req.body.username,
             parentId: req.body.parentId,
             body: req.body.body,
@@ -44,7 +41,6 @@ router.post('/:blogid', async (req, res) => {
 })
 
 router.delete('/:commentid', async (req, res) => {
-    console.log("deleting!!")
     const commentId = req.params.commentid;
     try{
         const comment = await CommentModel.find({id: commentId});
@@ -73,10 +69,7 @@ router.delete('/:commentid', async (req, res) => {
 })
 
 router.put('/:commentid', async (req, res) => {
-    
-
     const commentId = req.params.commentid;
-    console.log("updating!!!", commentId)
     try{
         const comment1 = await CommentModel.findOne({id: commentId});
         console.log(comment1)
@@ -91,11 +84,10 @@ router.put('/:commentid', async (req, res) => {
     }
 })
 
-router.get('/:blogId', async (req, res) => {
-    const blogId = req.params.blogId;
-    console.log(req.cookies, "cookies")
+router.get('/:blogName', async (req, res) => {
+    const blogName = req.params.blogName;
     try{
-        const comments = await CommentModel.find({blogId: blogId});
+        const comments = await CommentModel.find({blogName: blogName});
         console.log(comments)
         return res.json(comments);
     }

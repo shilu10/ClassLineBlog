@@ -10,7 +10,7 @@ const Comment = ({
   addComment,
   parentId = null,
   currentUsername,
-  
+  isUser
 }) => {
   const isEditing =
     activeComment &&
@@ -28,7 +28,7 @@ const Comment = ({
   const canEdit = currentUsername === comment.username ;
   const replyId = parentId ? parentId : comment.id;
   const createdAt = new Date(comment.createdAt).toLocaleDateString();
-
+  console.log(isUser, "from comment")
   return (
     <div className="comment-container">
       <div key={comment.id} className="comment">
@@ -45,6 +45,7 @@ const Comment = ({
           {!isEditing && <div className="comment-text">{comment.body}</div>}
           {isEditing && (
             <CommentForm
+              isUser={isUser}
               submitLabel="Update"
               hasCancelButton
               initialText={comment.body}
@@ -93,6 +94,7 @@ const Comment = ({
             <CommentForm
               submitLabel="Reply"
               handleSubmit={(text) => addComment(text, replyId)}
+              isUser={isUser}
             />
           )}
           {replies.length > 0 && (
@@ -108,7 +110,6 @@ const Comment = ({
                   addComment={addComment}
                   parentId={comment.id}
                   replies={[ ]}
-                  
                   currentUsername={currentUsername}
                 />
               ))}

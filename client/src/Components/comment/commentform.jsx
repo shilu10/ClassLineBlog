@@ -1,7 +1,6 @@
 import { useState } from "react";
 import './comment.css';
 import toast, { Toaster } from "react-hot-toast";
-import { useNavigate } from 'react-router-dom';
 
 const CommentForm = ({
   handleSubmit,
@@ -9,21 +8,22 @@ const CommentForm = ({
   hasCancelButton = false,
   handleCancel,
   initialText = "",
+  isUser
 }) => {
-  var access_token = sessionStorage.getItem("accessToken");
- 
+  
   const [text, setText] = useState(initialText);
   const isTextareaDisabled = text.length === 0;
-  const commentNavigator = useNavigate();
-
+  
   const onSubmit = (event) => {
     event.preventDefault();
     handleSubmit(text);
     setText("");
   };
 
+  console.log(isUser, "isUser")
+
   const isLoggedIn = () => {
-    if(!access_token){
+    if(!isUser){
       return true
     }
     return false
@@ -38,8 +38,9 @@ const CommentForm = ({
           value={text}
           onChange={(e) => setText(e.target.value)}
           disabled={isLoggedIn()}
-          onClick={()=>{
-            if(!access_token){
+          onMouseOver={()=>{
+            if(!isUser){
+              console.log("clicked")
               toast('Please Login to Make an comment',
                   {
                     icon: '👏',
@@ -55,9 +56,7 @@ const CommentForm = ({
                       progress: undefined,
                     }}
                     
-                );
-                commentNavigator('/login')}
-              
+                )};  
           }}
         />
         <button className="comment-form-button" disabled={isTextareaDisabled}>

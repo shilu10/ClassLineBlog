@@ -8,6 +8,7 @@ import { useGoogleLogout } from 'react-google-login';
 
 
 export default function Logout() {
+  const accessToken = sessionStorage.getItem("accessToken");
   const userProfile = JSON.parse(sessionStorage.getItem("userProfile"));
   const clientId = "418020920930-a54a5d5a26c9guqk0eh4cucrqd057gda.apps.googleusercontent.com";
   const onLogoutSuccess = () => {
@@ -21,6 +22,7 @@ export default function Logout() {
   const logoutNavigator = useNavigate();
   
   useEffect(()=>{
+    if(userProfile || accessToken)
       sessionStorage.removeItem("accessToken");
       sessionStorage.removeItem("profilePicture");
       sessionStorage.removeItem("userProfile");
@@ -29,8 +31,7 @@ export default function Logout() {
         signOut();
       }
       logoutNavigator('/');
-  }, []);
-  
+  });
   return (
     <div>
      

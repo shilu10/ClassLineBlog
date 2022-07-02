@@ -38,7 +38,7 @@ export default function Post({ blogpost }) {
           />
       </div>
       <div className='blog-details-wrapper'>
-        <Link style={{color: "black"}} to={`/post/${blogpost._id}`}>
+        <Link style={{color: "black"}} to={`/post/${blogpost.slug.current}`}>
           <h3 className='blog-title'>
             {blogpost.title} 
           </h3>

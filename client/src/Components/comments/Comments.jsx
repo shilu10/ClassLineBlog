@@ -7,43 +7,19 @@ import { useSelector, useDispatch } from 'react-redux';
 import { loginActions, userActions } from '../../Components/store/store';
 import jwt_decode from "jwt-decode";
 import toast, { Toaster } from "react-hot-toast";
-
+var access_token = sessionStorage.getItem("accessToken");
 // we need a whle comment to get the last comment id value, so we can use it for new comments
 // blogcomments - holds the current blog's all comments., backendcomments holds all the post commands
-export default function Comments({ blogId }){
+export default function Comments({ blogName, currentUsername, isUser, expDate }){
+ 
   const [backendComments, setBackendComments] = useState([]);
   const [blogComments, setBlogComments]  = useState([]);
   const [activeComment, setActiveComment] = useState(null);
   const dispatch = useDispatch();
   const axiosInt = axios.create();
+  console.log(blogName);
   
-  var access_token = sessionStorage.getItem("accessToken");
-  var currentUsername = null;
-  var profilePicture = null;
-  var email = null;
-  var expDate = null;
-  console.log(access_token, "username from home")
-
-  if(access_token){
-    var decoded = jwt_decode(access_token);
-    if(decoded._doc){
-      decoded = decoded._doc;
-    }
-    currentUsername = decoded.username;
-    profilePicture = decoded.profilePicture;
-    email = decoded.email;
-    expDate = decoded.exp;
-}
-  const user = {
-    username: currentUsername,
-    email: email,
-    profilePicture: profilePicture,
-    isUser: true
-  };
-  console.log(user, "suer from comments", decoded)
   
-  userActions.setUser(user);
-
   const fetchComment = async() =>{
     try{
       const response = await axios.get("http://localhost:8000/api/comments");
@@ -86,7 +62,7 @@ export default function Comments({ blogId }){
   useEffect(()=>{
     try{
         const fetchComment = async () =>{
-            const response = await axios.get(`http://localhost:8000/api/comments/${blogId}`);
+            const response = await axios.get(`http://localhost:8000/api/comments/${blogName}`);
             setBlogComments(response.data);
             }
             fetchComment();
@@ -100,6 +76,7 @@ export default function Comments({ blogId }){
        backendComments.filter((backendComment) => backendComment.parentId == commentId)
 
   axiosInt.interceptors.response.use(async(config) =>{
+    console.log("interceptor")
           const currDate = Date.now();
           if(currDate > expDate*1000){
             console.log("axiosItn", currDate>expDate*1000)
@@ -117,11 +94,13 @@ export default function Comments({ blogId }){
       });
       
   const addComment = async (text) => {
-    if(access_token){
+    console.log(blogName)
+    if(isUser){
       let parentId = activeComment  ? activeComment.id : null;
     // only here we use all the comments, onlyto get the last comment id.
       try{
-        const response = await axios.post(`http://localhost:8000/api/comments/${blogId}`,
+        console.log("started post comment")
+        const response = await axios.post(`http://localhost:8000/api/comments/${blogName}`,
         {
           username: currentUsername,
           body: text,
@@ -130,6 +109,7 @@ export default function Comments({ blogId }){
         {
           withCredentials: true,
         });
+        console.log(response, "from add comments")
         window.location.reload();
         toast.success('Comment Posted successfully, Refresh the page to view the comment',
                   {
@@ -224,7 +204,7 @@ export default function Comments({ blogId }){
         <div className="comments">
           <h3 className="comments-title">Comments</h3>
           <div className="comment-form-title">Write comment</div>
-          <CommentForm submitLabel="Write" handleSubmit={addComment} />
+          <CommentForm submitLabel="Write" handleSubmit={addComment} isUser={isUser}/>
             <div className="comments-container">
               {rootComments.map((rootComment) => (
                 <Comment
@@ -238,6 +218,7 @@ export default function Comments({ blogId }){
                   updateComment={updateComment}
                   currentUsername={currentUsername}
                   getRepliesFunc={getReplies}
+                  isUser={isUser}
                 />
               ))}
             </div>

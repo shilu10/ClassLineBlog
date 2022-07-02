@@ -23,7 +23,6 @@ export default function Login() {
     gapi.load('auth2', () => {
       gapi.auth2.init({
         client_id: '418020920930-a54a5d5a26c9guqk0eh4cucrqd057gda.apps.googleusercontent.com',
-        scope: ''
       });})
     
     if(currentregister){

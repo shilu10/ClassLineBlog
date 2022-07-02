@@ -20,7 +20,7 @@ const Home = () => {
   const currentLogin = useSelector(state=>state.loginReducer.currentLogin);
   const [posts, setPosts] = useState([]);
   const dispatch = useDispatch();
-  const query = '*[_type == "post"]{title, slug, body, mainImage{asset ->{url}, alt}, "authorName": author->name, "authorImage": author->image, "categories": categories[]->title, "createdAt": _createdAt, "authorImage": author->image}';
+  const query = '*[_type == "post"]{title, slug, body, mainImage{asset ->{url}, alt}, "authorName": author->name, "authorImage": author->image, "categories": categories[]->title, "createdAt": _createdAt}';
   
   var userId = null;
   var username = null;
@@ -65,10 +65,8 @@ const fetchProfile = async() => {
       }
     catch(err){
       console.log(err);
-    }
-}
-};
-
+    }}};
+    
   if(username){
     fetchProfile();
   }
@@ -125,8 +123,8 @@ const fetchProfile = async() => {
       isUser: true
     };
     userActions.setUser(user);
-  }, [])
-
+  }, []);
+  
   return (
         <div className='body-container'>
             <Topbar isUser={username?true:false} profilePicture={profilePicture}/>
