@@ -5,7 +5,8 @@
     flex-direction: column;
 }
 .single-page{
-    width: 70%;
+    width: 65%;
+    margin-top: 0px!important;
 }
 
 .single-page-comment-wrapper{

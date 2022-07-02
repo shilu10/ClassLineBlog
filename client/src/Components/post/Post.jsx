@@ -33,7 +33,7 @@ export default function Post({ blogpost }) {
       <div className='card-img-wrapper'>
           <img 
               className='card-img'
-              src={ blogpost.mainImage.asset.url}
+              src={blogpost.mainImage ?  blogpost.mainImage.asset.url : ""}
               alt=""
           />
       </div>

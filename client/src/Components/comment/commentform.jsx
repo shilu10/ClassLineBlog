@@ -20,8 +20,6 @@ const CommentForm = ({
     setText("");
   };
 
-  console.log(isUser, "isUser")
-
   const isLoggedIn = () => {
     if(!isUser){
       return true
@@ -39,7 +37,8 @@ const CommentForm = ({
           onChange={(e) => setText(e.target.value)}
           disabled={isLoggedIn()}
           onMouseOver={()=>{
-            if(!isUser){
+            var count = 0
+            if(!isUser && count===0){
               console.log("clicked")
               toast('Please Login to Make an comment',
                   {
@@ -55,9 +54,8 @@ const CommentForm = ({
                       draggable: true,
                       progress: undefined,
                     }}
-                    
                 )};  
-          }}
+                count+=1;}}
         />
         <button className="comment-form-button" disabled={isTextareaDisabled}>
           {submitLabel}

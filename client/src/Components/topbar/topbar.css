@@ -11,8 +11,8 @@
     
 }
 .top-center{
-    flex:6;
-
+    flex: 6;
+    color: ;
 }
 
 .top-right{
@@ -38,7 +38,6 @@
     object-fit: cover;
 }
 
-
 .top-icons{
     font-size: 30px;
     margin-right: 10px;
@@ -62,8 +61,10 @@
     font-weight: 300;
     font-size: 25px;
     font-display: swap;
-    color:#444;
+    color:rgb(168, 164, 164);
     display: flex;
+    list-style: none;
+    
 }
 
 .icon-search{
@@ -84,3 +85,33 @@
     float: right;
 }
 
+.topbar-hamburger{
+    position: absolute;
+
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    width: 30px;
+    height: 30px
+}
+
+.topbar-hamburger .bar{
+    height: 4px;
+    width: 100%;
+    background-color: black;
+    border-radius: 10px;
+    margin: 3px;
+}
+
+a:hover{
+    color:rgb(168, 164, 164);
+}
+
+@media screen and (max-width: 600px){
+    .topbar-hamburger{
+        display: flex;
+    }
+    .top-list{
+        display: none;
+    }
+}

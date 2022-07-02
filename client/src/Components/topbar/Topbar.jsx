@@ -15,7 +15,7 @@ export default function Topbar({ isUser, profilePicture }) {
         <div className="top-center">
           <ul className="top-list">
             <li className="toplist-item" >
-              <Link className="link" to={"/"}>Home</Link> |{" "}
+              <Link className="link" to={"/"}>Home</Link> 
             </li>
             <li className="toplist-item">
               <Link className="link" to={"/about"} >
@@ -44,6 +44,11 @@ export default function Topbar({ isUser, profilePicture }) {
         </div>
 
         <div className="top-right">
+          <a href="#" className="topbar-hamburger">
+            <span className="bar"></span>
+            <span className="bar"></span>
+            <span className="bar"></span>
+          </a>
           <Link className="link" to="settings">
             {profilePicture ? <img className="topbar-img"
               src={profilePicture}
@@ -58,9 +63,7 @@ export default function Topbar({ isUser, profilePicture }) {
             /> 
             }
           </Link>
-            <form>
-              <i className="icon-search fa-solid fa-magnifying-glass"></i>
-            </form>
+            
         </div>
     </div>
   )
